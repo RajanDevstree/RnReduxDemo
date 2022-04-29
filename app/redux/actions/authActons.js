@@ -1,4 +1,3 @@
-/* eslint-disable radix */
 import {USER_LOGIN, AUTH_LOADING, USER_LOGOUT} from './types';
 import Toast from 'react-native-toast-message';
 
@@ -53,7 +52,7 @@ export const userLoginAction =
           });
         } else {
           Toast.show({
-            text1: 'Loading Failure',
+            text1: 'User Login failed.',
             visibilityTime: 3000,
             autoHide: true,
             position: 'top',

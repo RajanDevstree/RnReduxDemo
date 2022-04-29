@@ -10,11 +10,9 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
 import {useSelector, useDispatch} from 'react-redux';
 
 import TaskItem from '../../modules/Home/component/TaskItem';
-
 import {changeThemeAction} from '../../redux/actions/themeActions';
 import {authLogOutAction} from '../../redux/actions/authActons';
 import {getUserTask} from '../../redux/actions/productActions';
@@ -120,10 +118,10 @@ const Home = ({navigation}) => {
       ) : (
         <>
           <FlatList
-            maxToRenderPerBatch={15} // 5
-            updateCellsBatchingPeriod={5} // 50
-            initialNumToRender={10} // 3
-            windowSize={5} // 5
+            maxToRenderPerBatch={15} 
+            updateCellsBatchingPeriod={5} 
+            initialNumToRender={10} 
+            windowSize={5} 
             data={userTaskList}
             renderItem={renderItem}
             contentContainerStyle={{
