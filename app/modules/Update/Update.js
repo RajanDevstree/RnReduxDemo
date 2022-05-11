@@ -53,6 +53,11 @@ const Update = ({navigation}) => {
         minimumVersion: '18',
         data: text ? text : '',
       },
+      ios: {
+        bundleId: 'com.devstree.rnreduxdemo',
+        appStoreId: '12345678',
+        minimumVersion: '18',
+      }   
     });
     console.log(link);
 
