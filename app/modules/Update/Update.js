@@ -8,70 +8,79 @@ import {
   TouchableOpacity,
   SafeAreaView,
   ActivityIndicator,
+  Button,
+  TextInput,
+  Share,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useSelector, useDispatch} from 'react-redux';
+import dynamicLinks from '@react-native-firebase/dynamic-links';
 
-import TaskItem from '../../modules/Home/component/TaskItem';
+import TaskItem from './component/TaskItem';
 import {changeThemeAction} from '../../redux/actions/themeActions';
 import {authLogOutAction} from '../../redux/actions/authActons';
-import {getUserTask} from '../../redux/actions/productActions';
+import {
+  getUserTask,
+  backGroundApiRequestTaskAction,
+} from '../../redux/actions/productActions';
 
-const Home = ({navigation}) => {
+const Update = ({navigation}) => {
   const dispatch = useDispatch();
   const {appThemeColor} = useSelector(state => state.themeState);
   const {userTaskList, userTaskLoading, userTaskError} = useSelector(
     state => state.productState,
   );
+  const [text, onChangeText] = React.useState('');
 
   useEffect(() => {
     dispatch(getUserTask());
   }, []);
 
+  const actionUpdateDate = () => {
+    dispatch(backGroundApiRequestTaskAction());
+  };
+
   const renderItem = ({item}) => (
     <TaskItem item={item} appThemeColor={appThemeColor} />
   );
 
+  const createdpLink = async () => {
+    const link = await dynamicLinks().buildLink({
+      link: `https://rnreduxdemodevstree.page.link/1?${text ? text : 'NN'}`,
+      domainUriPrefix: 'https://rnreduxdemodevstree.page.link',
+      android: {
+        packageName: 'com.rnreduxdemo',
+        minimumVersion: '18',
+        data: text ? text : '',
+      },
+    });
+    console.log(link);
+
+    const result = await Share.share({
+      title: 'App link',
+      message: link,
+      url: link,
+    });
+  };
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#FFFFFF'}}>
       <StatusBar backgroundColor={appThemeColor} barStyle="light-content" />
-
-      <View
-        style={{
-          justifyContent: 'center',
-          alignItems: 'center',
-          paddingVertical: 12,
-          backgroundColor: appThemeColor,
-        }}>
-        <TouchableOpacity
-          onPress={() => {
-            dispatch(changeThemeAction());
-          }}
-          style={{
-            position: 'absolute',
-            left: '6%',
-            zIndex: 100,
-            alignItems: 'center',
-            alignSelf: 'center',
-          }}>
-          <Ionicons size={23} color="#FFFFFF" name="color-palette-sharp" />
-        </TouchableOpacity>
-
-        <Text style={{color: '#FFFFFF', fontSize: 17}}>Dashboard</Text>
-        <TouchableOpacity
-          onPress={() => {
-            dispatch(authLogOutAction());
-          }}
-          style={{
-            position: 'absolute',
-            right: '6%',
-            zIndex: 100,
-            alignItems: 'center',
-            alignSelf: 'center',
-          }}>
-          <Ionicons size={23} color="#FFFFFF" name="log-out-outline" />
-        </TouchableOpacity>
+      <View style={{marginVertical: 10, marginHorizontal: 10}}>
+        <Button onPress={actionUpdateDate} title="background api request" />
+        <View style={{marginVertical: 10, marginHorizontal: 10}} />
+        <Button onPress={createdpLink} title="Create Dyamic Link" />
       </View>
+      <TextInput
+        style={{
+          backgroundColor: '#dddddd',
+          marginHorizontal: 20,
+          marginVertical: 10,
+          paddingVertical: 5,
+        }}
+        onChangeText={onChangeText}
+        value={text}
+      />
 
       {userTaskLoading ? (
         <View
@@ -136,4 +145,4 @@ const Home = ({navigation}) => {
   );
 };
 
-export default Home;
+export default Update;

@@ -1,5 +1,7 @@
 import {USER_LOGIN, AUTH_LOADING, USER_LOGOUT} from './types';
 import Toast from 'react-native-toast-message';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import APICallService from '../../Api/APICallService';
 
 export const authLoadingAction =
   (loading = false) =>
@@ -11,38 +13,54 @@ export const authLoadingAction =
   };
 
 export const authLogOutAction = () => dispatch => {
+  AsyncStorage.removeItem('@token_Key');
+
   dispatch({
     type: USER_LOGOUT,
   });
 };
 
+export const authLogInTokenAction = token => dispatch => {
+  dispatch({
+    type: USER_LOGIN,
+    payload: token,
+  });
+};
+
 export const userLoginAction =
   (userName = '', userPassword = '') =>
-  dispatch => {
+  (dispatch, getState) => {
+    const {
+      authState: {userToken},
+    } = getState();
     dispatch(authLoadingAction(true));
-    var myHeaders = new Headers();
-    myHeaders.append('Content-Type', 'application/json');
 
-    var raw = JSON.stringify({name: userName, password: userPassword});
+    console.log(userToken, 'Header');
 
-    var requestOptions = {
-      method: 'POST',
-      headers: myHeaders,
-      body: raw,
-      redirect: 'follow',
-    };
+    const apiCall = new APICallService(
+      '/apidemo/api/filter',
+      'GET',
+      '744c5e9fc1123e4d058feab4c912c92c',
+      {
+        mobile: userName,
+        password: userPassword,
+      },
+    );
 
-    fetch('https://jsonplaceholder.typicode.com/users', requestOptions)
-      .then(response => response.text())
-      .then(result => {
-        let serverResponse = JSON.parse(result);
+    apiCall
+      .callAPI()
+      .then(response => {
         dispatch(authLoadingAction());
-        if (serverResponse) {
+
+        if (response) {
+          console.log(response);
           dispatch({
             type: USER_LOGIN,
             payload: '@static_token',
           });
-
+          (async () => {
+            await AsyncStorage.setItem('@token_Key', '@static_token');
+          })();
           Toast.show({
             text1: 'User Login Successfully',
             visibilityTime: 3000,
@@ -50,21 +68,12 @@ export const userLoginAction =
             position: 'top',
             type: 'success',
           });
-        } else {
-          Toast.show({
-            text1: 'User Login failed.',
-            visibilityTime: 3000,
-            autoHide: true,
-            position: 'top',
-            type: 'error',
-          });
         }
       })
-      .catch(error => {
+      .catch(err => {
         dispatch(authLoadingAction());
-
         Toast.show({
-          text1: 'Server response failed',
+          text1: err.message ? err.message : 'Server response failed',
           visibilityTime: 3000,
           autoHide: true,
           position: 'top',

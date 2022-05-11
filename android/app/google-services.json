@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "125513438179",
+    "project_id": "rnreduxdeeplinkdemo",
+    "storage_bucket": "rnreduxdeeplinkdemo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:125513438179:android:e93e00386e86d60f2786d6",
+        "android_client_info": {
+          "package_name": "com.rnreduxdemo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "125513438179-86ad964njgnc0e7jvaosjrh7nl2kvl43.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDVvM6usU-MwdPy61SMALR28Xn6PAlT48c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "125513438179-86ad964njgnc0e7jvaosjrh7nl2kvl43.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

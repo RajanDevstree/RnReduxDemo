@@ -35,24 +35,24 @@ const SignIn = ({navigation}) => {
 
   const userSignIn = () => {
     if (emailInput && passwordInput) {
-      if (
-        !String(emailInput)
-          .toLowerCase()
-          .match(
-            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-          )
-      ) {
-        Toast.show({
-          text1: 'please enter a valid email address',
-          visibilityTime: 3000,
-          autoHide: true,
-          position: 'top',
-          type: 'error',
-        });
+      // if (
+      //   !String(emailInput)
+      //     .toLowerCase()
+      //     .match(
+      //       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+      //     )
+      // ) {
+      //   Toast.show({
+      //     text1: 'please enter a valid email address',
+      //     visibilityTime: 3000,
+      //     autoHide: true,
+      //     position: 'top',
+      //     type: 'error',
+      //   });
 
-        return;
-      }
-      dispatch(userLoginAction(emailInput, passwordInput));
+      //   return;
+      // }
+      dispatch(userLoginAction('8128421663', passwordInput));
     } else {
       Toast.show({
         text1: 'you forgot to enter something',
@@ -251,6 +251,39 @@ const SignIn = ({navigation}) => {
                       fontSize: 16,
                     }}>
                     Sign In
+                  </Text>
+                </View>
+              </TouchableNativeFeedback>
+            </View>
+            <View
+              style={{
+                overflow: 'hidden',
+                borderRadius: 3,
+              }}>
+              <TouchableNativeFeedback
+                accessible={false}
+                background={TouchableNativeFeedback.Ripple('#ECECEC')}
+                onPress={() => {
+                  dispatch(userLoginAction(emailInput, passwordInput));
+
+                  // Keyboard.dismiss();
+                  // userSignIn();
+                }}>
+                <View
+                  style={{
+                    backgroundColor: appThemeColor,
+                    marginTop: 30,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    borderRadius: 30,
+                    paddingVertical: 10,
+                  }}>
+                  <Text
+                    style={{
+                      color: '#FFFFFF',
+                      fontSize: 16,
+                    }}>
+                    Test Diff APi Request
                   </Text>
                 </View>
               </TouchableNativeFeedback>
