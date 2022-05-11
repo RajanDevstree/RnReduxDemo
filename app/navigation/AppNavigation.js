@@ -37,10 +37,12 @@ const AppNavigation = () => {
   }, []);
 
   const handleDynamicLink = link => {
-    console.log(link, "1234567890=====");
-    alert(JSON.stringify(link));
-    alert(link.url.split('?')[1]);
-// Handle dynamic link inside your own application
+    if (link) {
+      console.log(link, '1234567890=====');
+      alert(JSON.stringify(link));
+      alert(link.url.split('?')[1]);
+    }
+    // Handle dynamic link inside your own application
     // if (link.url === 'https://invertase.io/offer') {
     //   // ...navigate to your offers screen
     // }
@@ -52,9 +54,11 @@ const AppNavigation = () => {
     dynamicLinks()
       .getInitialLink()
       .then(link => {
-        console.log(link, "1234567890----");
-        alert(JSON.stringify(link));
-        alert(link.url.split('?')[1]);
+        if (link) {
+          console.log(link, '1234567890----');
+          alert(JSON.stringify(link));
+          alert(link.url.split('?')[1]);
+        }
       });
 
     // When the component is unmounted, remove the listener

@@ -5,20 +5,26 @@ import {
   View,
   Text,
   FlatList,
-  TouchableOpacity,
   SafeAreaView,
   ActivityIndicator,
   Button,
   TextInput,
   Share,
 } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useSelector, useDispatch} from 'react-redux';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
+import admob, {MaxAdContentRating} from '@react-native-firebase/admob';
+import {
+  InterstitialAd,
+  RewardedAd,
+  BannerAd,
+  BannerAdSize,
+  TestIds,
+  RewardedAdEventType,
+  AdEventType,
+} from '@react-native-firebase/admob';
 
 import TaskItem from './component/TaskItem';
-import {changeThemeAction} from '../../redux/actions/themeActions';
-import {authLogOutAction} from '../../redux/actions/authActons';
 import {
   getUserTask,
   backGroundApiRequestTaskAction,
@@ -26,15 +32,67 @@ import {
 
 const Update = ({navigation}) => {
   const dispatch = useDispatch();
-  const {appThemeColor} = useSelector(state => state.themeState);
-  const {userTaskList, userTaskLoading, userTaskError} = useSelector(
-    state => state.productState,
-  );
-  const [text, onChangeText] = React.useState('');
 
   useEffect(() => {
     dispatch(getUserTask());
   }, []);
+
+  useEffect(() => {
+    // admob()
+    //   .setRequestConfiguration({
+    //     maxAdContentRating: MaxAdContentRating.PG,
+    //     tagForChildDirectedTreatment: true,
+    //     tagForUnderAgeOfConsent: true,
+    //   })
+    //   .then(() => {});
+  }, []);
+
+  useEffect(() => {
+    let interstitial = InterstitialAd.createForAdRequest(TestIds.INTERSTITIAL, {
+      requestNonPersonalizedAdsOnly: true,
+      keywords: ['fashion', 'clothing'],
+    });
+
+    let interstitialListeener = interstitial.onAdEvent(type => {
+      if (type === AdEventType.LOADED) {
+        interstitial.show();
+      }
+    });
+    interstitial.load();
+
+    return () => {
+      interstitialListeener = null;
+    };
+  }, []);
+
+  // useEffect(() => {
+  //   let rewardAd = RewardedAd.createForAdRequest(TestIds.REWARDED, {
+  //     requestNonPersonalizedAdsOnly: true,
+  //     keywords: ['fashion', 'clothing'],
+  //   });
+
+  //   let rewardAdListener = rewardAd.onAdEvent((type, error, reward) => {
+  //     if (type === RewardedAdEventType.LOADED) {
+  //       rewardAd.show();
+  //     }
+
+  //     if (type === RewardedAdEventType.EARNED_REWARD) {
+  //       alert(`earned + ${reward.amount}`);
+  //       console.log(reward, '1234567890');
+  //     }
+  //   });
+  //   rewardAd.load();
+
+  //   return () => {
+  //     rewardAdListener = null;
+  //   };
+  // }, []);
+
+  const {appThemeColor} = useSelector(state => state.themeState);
+  const {userTaskList, userTaskLoading, userTaskError} = useSelector(
+    state => state.productState,
+  );
+  const [text, onChangeText] = useState('');
 
   const actionUpdateDate = () => {
     dispatch(backGroundApiRequestTaskAction());
@@ -57,7 +115,7 @@ const Update = ({navigation}) => {
         bundleId: 'com.devstree.rnreduxdemo',
         appStoreId: '12345678',
         minimumVersion: '18',
-      }   
+      },
     });
     console.log(link);
 
@@ -76,6 +134,22 @@ const Update = ({navigation}) => {
         <View style={{marginVertical: 10, marginHorizontal: 10}} />
         <Button onPress={createdpLink} title="Create Dyamic Link" />
       </View>
+
+      <BannerAd
+        unitId={TestIds.BANNER}
+        size={BannerAdSize.FULL_BANNER}
+        requestOptions={{
+          requestNonPersonalizedAdsOnly: true,
+        }}
+      />
+      <BannerAd
+        unitId={TestIds.BANNER}
+        size={BannerAdSize.MEDIUM_RECTANGLE}
+        requestOptions={{
+          requestNonPersonalizedAdsOnly: true,
+        }}
+      />
+
       <TextInput
         style={{
           backgroundColor: '#dddddd',
