@@ -47,46 +47,46 @@ const Update = ({navigation}) => {
     //   .then(() => {});
   }, []);
 
-  useEffect(() => {
-    let interstitial = InterstitialAd.createForAdRequest(TestIds.INTERSTITIAL, {
-      requestNonPersonalizedAdsOnly: true,
-      keywords: ['fashion', 'clothing'],
-    });
-
-    let interstitialListeener = interstitial.onAdEvent(type => {
-      if (type === AdEventType.LOADED) {
-        interstitial.show();
-      }
-    });
-    interstitial.load();
-
-    return () => {
-      interstitialListeener = null;
-    };
-  }, []);
-
   // useEffect(() => {
-  //   let rewardAd = RewardedAd.createForAdRequest(TestIds.REWARDED, {
+  //   let interstitial = InterstitialAd.createForAdRequest(TestIds.INTERSTITIAL, {
   //     requestNonPersonalizedAdsOnly: true,
   //     keywords: ['fashion', 'clothing'],
   //   });
 
-  //   let rewardAdListener = rewardAd.onAdEvent((type, error, reward) => {
-  //     if (type === RewardedAdEventType.LOADED) {
-  //       rewardAd.show();
-  //     }
-
-  //     if (type === RewardedAdEventType.EARNED_REWARD) {
-  //       alert(`earned + ${reward.amount}`);
-  //       console.log(reward, '1234567890');
+  //   let interstitialListeener = interstitial.onAdEvent(type => {
+  //     if (type === AdEventType.LOADED) {
+  //       interstitial.show();
   //     }
   //   });
-  //   rewardAd.load();
+  //   interstitial.load();
 
   //   return () => {
-  //     rewardAdListener = null;
+  //     interstitialListeener = null;
   //   };
   // }, []);
+
+  useEffect(() => {
+    let rewardAd = RewardedAd.createForAdRequest(TestIds.REWARDED, {
+      requestNonPersonalizedAdsOnly: true,
+      keywords: ['fashion', 'clothing'],
+    });
+
+    let rewardAdListener = rewardAd.onAdEvent((type, error, reward) => {
+      if (type === RewardedAdEventType.LOADED) {
+        rewardAd.show();
+      }
+
+      if (type === RewardedAdEventType.EARNED_REWARD) {
+        alert(`earned + ${reward.amount}`);
+        console.log(reward, '1234567890');
+      }
+    });
+    rewardAd.load();
+
+    return () => {
+      rewardAdListener = null;
+    };
+  }, []);
 
   const {appThemeColor} = useSelector(state => state.themeState);
   const {userTaskList, userTaskLoading, userTaskError} = useSelector(
@@ -126,6 +126,8 @@ const Update = ({navigation}) => {
     });
   };
 
+  console.log(TestIds.BANNER);
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#FFFFFF'}}>
       <StatusBar backgroundColor={appThemeColor} barStyle="light-content" />
@@ -136,7 +138,7 @@ const Update = ({navigation}) => {
       </View>
 
       <BannerAd
-        unitId={TestIds.BANNER}
+        unitId={"ca-app-pub-1141894201995980/6022615117"}
         size={BannerAdSize.FULL_BANNER}
         requestOptions={{
           requestNonPersonalizedAdsOnly: true,
