@@ -13,22 +13,15 @@ import {
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
-import admob, {MaxAdContentRating} from '@react-native-firebase/admob';
-import {
-  InterstitialAd,
-  RewardedAd,
-  BannerAd,
-  BannerAdSize,
-  TestIds,
-  RewardedAdEventType,
-  AdEventType,
-} from '@react-native-firebase/admob';
+import auth from '@react-native-firebase/auth';
 
 import TaskItem from './component/TaskItem';
 import {
   getUserTask,
   backGroundApiRequestTaskAction,
 } from '../../redux/actions/productActions';
+
+import {authLogOutAction} from '../../redux/actions/authActons';
 
 const Update = ({navigation}) => {
   const dispatch = useDispatch();
@@ -65,28 +58,28 @@ const Update = ({navigation}) => {
   //   };
   // }, []);
 
-  useEffect(() => {
-    let rewardAd = RewardedAd.createForAdRequest(TestIds.REWARDED, {
-      requestNonPersonalizedAdsOnly: true,
-      keywords: ['fashion', 'clothing'],
-    });
+  // useEffect(() => {
+  //   let rewardAd = RewardedAd.createForAdRequest(TestIds.REWARDED, {
+  //     requestNonPersonalizedAdsOnly: true,
+  //     keywords: ['fashion', 'clothing'],
+  //   });
 
-    let rewardAdListener = rewardAd.onAdEvent((type, error, reward) => {
-      if (type === RewardedAdEventType.LOADED) {
-        rewardAd.show();
-      }
+  //   let rewardAdListener = rewardAd.onAdEvent((type, error, reward) => {
+  //     if (type === RewardedAdEventType.LOADED) {
+  //       rewardAd.show();
+  //     }
 
-      if (type === RewardedAdEventType.EARNED_REWARD) {
-        alert(`earned + ${reward.amount}`);
-        console.log(reward, '1234567890');
-      }
-    });
-    rewardAd.load();
+  //     if (type === RewardedAdEventType.EARNED_REWARD) {
+  //       alert(`earned + ${reward.amount}`);
+  //       console.log(reward, '1234567890');
+  //     }
+  //   });
+  //   rewardAd.load();
 
-    return () => {
-      rewardAdListener = null;
-    };
-  }, []);
+  //   return () => {
+  //     rewardAdListener = null;
+  //   };
+  // }, []);
 
   const {appThemeColor} = useSelector(state => state.themeState);
   const {userTaskList, userTaskLoading, userTaskError} = useSelector(
@@ -126,33 +119,45 @@ const Update = ({navigation}) => {
     });
   };
 
-  console.log(TestIds.BANNER);
-
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#FFFFFF'}}>
       <StatusBar backgroundColor={appThemeColor} barStyle="light-content" />
       <View style={{marginVertical: 10, marginHorizontal: 10}}>
-        <Button onPress={actionUpdateDate} title="background api request" />
+        {/* <Button onPress={actionUpdateDate} title="background api request" />
         <View style={{marginVertical: 10, marginHorizontal: 10}} />
         <Button onPress={createdpLink} title="Create Dyamic Link" />
+        <View style={{marginVertical: 10, marginHorizontal: 10}} /> */}
+
+        <Button
+          onPress={() => {
+            console.log('log out');
+            auth()
+              .signOut()
+              .then(response => {
+                console.log(response, 'log out success ful');
+                dispatch(authLogOutAction());
+              });
+          }}
+          title="LogOut"
+        />
       </View>
 
-      <BannerAd
+      {/* <BannerAd
         unitId={"ca-app-pub-1141894201995980/6022615117"}
         size={BannerAdSize.FULL_BANNER}
         requestOptions={{
           requestNonPersonalizedAdsOnly: true,
         }}
-      />
-      <BannerAd
+      /> */}
+      {/* <BannerAd
         unitId={TestIds.BANNER}
         size={BannerAdSize.MEDIUM_RECTANGLE}
         requestOptions={{
           requestNonPersonalizedAdsOnly: true,
         }}
-      />
+      /> */}
 
-      <TextInput
+      {/* <TextInput
         style={{
           backgroundColor: '#dddddd',
           marginHorizontal: 20,
@@ -161,7 +166,7 @@ const Update = ({navigation}) => {
         }}
         onChangeText={onChangeText}
         value={text}
-      />
+      /> */}
 
       {userTaskLoading ? (
         <View

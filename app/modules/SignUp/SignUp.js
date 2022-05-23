@@ -18,6 +18,7 @@ import Moment from 'moment';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useSelector, useDispatch} from 'react-redux';
 import Toast from 'react-native-toast-message';
+import auth from '@react-native-firebase/auth';
 
 import {userLoginAction} from '../../redux/actions/authActons';
 
@@ -87,7 +88,53 @@ const SignUp = ({navigation}) => {
         return;
       }
 
-      dispatch(userLoginAction(emailInput, passwordInput));
+      // if (auth)
+
+      auth()
+        .createUserWithEmailAndPassword(emailInput, passwordInput)
+        .then(successSendEmail => {
+          console.log(successSendEmail.user, 'SignUp page');
+
+          alert(`Sign Up Successfully ${emailInput}`);
+          setEmailInput('');
+          setPasswordInput('');
+
+          if (
+            successSendEmail &&
+            successSendEmail.user &&
+            successSendEmail.user.emailVerified == false
+          ) {
+            // 1> sendSignInLinkToEmail 2> sendEmailVerification
+            auth()
+              .currentUser.sendEmailVerification({
+                // emai: emailInput,
+                handleCodeInApp: true,
+                // URL must be whitelisted in the Firebase Console.
+                url: 'https://rnreduxdemodevstree.page.link',
+                // iOS: {
+                //   bundleId: 'com.rnreduxdemo',
+                // },
+                // android: {
+                //   packageName: 'com.rnreduxdemo',
+                //   installApp: true,
+                //   minimumVersion: '12',
+                // },
+              })
+              .then(successSendEmail => {
+                alert(`Login link sent to ${emailInput}`);
+                setEmailInput('');
+                setPasswordInput('');
+              })
+              .catch(error => {
+                alert(error.message);
+              });
+          }
+        })
+        .catch(error => {
+          alert(error.message);
+        });
+
+      // dispatch(userLoginAction(emailInput, passwordInput));
     } else {
       Toast.show({
         text1: 'You Forgot to enter something',

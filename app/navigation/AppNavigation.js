@@ -7,16 +7,20 @@ import React, {useState, useEffect} from 'react';
 import {View} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
+import auth from '@react-native-firebase/auth';
 
 import SignIn from '../modules/SignIn/SignIn.js';
-import Home from '../modules/Home/Home';
+// import Home from '../modules/Home/Home';
 import SignUp from '../modules/SignUp/SignUp';
 import Loading from '../modules/Loading/Loading';
 import Update from '../modules/Update/Update';
 import {useSelector, useDispatch} from 'react-redux';
 import Spinner from 'react-native-loading-spinner-overlay';
 
-import {authLogInTokenAction} from '../redux/actions/authActons';
+import {
+  authLogInTokenAction,
+  authEmailLinkAction,
+} from '../redux/actions/authActons';
 
 const Stack = createStackNavigator();
 
@@ -28,24 +32,60 @@ const AppNavigation = () => {
   const NavigationAnimationType =
     CardStyleInterpolators.forRevealFromBottomAndroid;
 
+  // useEffect(() => {
+  //   (async () => {
+  //     const userTokenAsync = await AsyncStorage.getItem('@token_Key');
+  //     dispatch(authLogInTokenAction(userTokenAsync));
+  //     setLoading(false);
+  //   })();
+  // }, []);
+
   useEffect(() => {
-    (async () => {
-      const userTokenAsync = await AsyncStorage.getItem('@token_Key');
-      dispatch(authLogInTokenAction(userTokenAsync));
+    const subscriber = auth().onAuthStateChanged(user => {
+      console.log(user, '1234567890');
+      if (user && user.emailVerified) {
+        console.log('THiS IS RUING AND TOKEN SET SET SET');
+        dispatch(authLogInTokenAction('@FIrebaseAuthLogin'));
+      }
       setLoading(false);
-    })();
+    });
+    return subscriber;
   }, []);
 
   const handleDynamicLink = link => {
     if (link) {
       console.log(link, '1234567890=====');
-      alert(JSON.stringify(link));
-      alert(link.url.split('?')[1]);
+      // alert(JSON.stringify(link));
+      // alert(link.url.split('?')[1]);
+
+      if (auth().isSignInWithEmailLink(link.url)) {
+        dispatch(authEmailLinkAction(link.url));
+        // setLoading(true);
+        // console.log('set login true is runiing');
+
+        // try {
+        //   AsyncStorage.getItem('emailForSignIn').then(emailResponse => {
+        //     auth()
+        //       .signInWithEmailLink(emailResponse, link.url)
+        //       .then(data => {
+        //         console.log(data, 'DATA REPONSE SUCESS USER lOGIN');
+        //         setLoading(false);
+        //         dispatch(authLogInTokenAction('@FirebaseLogin'));
+        //       })
+        //       .catch(error => {
+        //         setLoading(false);
+        //         alert(error.message);
+        //         console.log(error, 'email link login Error');
+        //       });
+        //   });
+        // } catch (e) {
+        //   console.log(e);
+        //   setLoading(false);
+        // } finally {
+        //   setLoading(false);
+        // }
+      }
     }
-    // Handle dynamic link inside your own application
-    // if (link.url === 'https://invertase.io/offer') {
-    //   // ...navigate to your offers screen
-    // }
   };
 
   useEffect(() => {
@@ -55,9 +95,12 @@ const AppNavigation = () => {
       .getInitialLink()
       .then(link => {
         if (link) {
-          console.log(link, '1234567890----');
           alert(JSON.stringify(link));
           alert(link.url.split('?')[1]);
+
+          if (auth().isSignInWithEmailLink(link.url)) {
+            dispatch(authEmailLinkAction(link.url));
+          }
         }
       });
 
@@ -84,7 +127,7 @@ const AppNavigation = () => {
               cardStyleInterpolator: NavigationAnimationType,
             }}
           />
-        ) : true ? (
+        ) : userToken ? (
           <>
             <Stack.Screen
               name="Update"
@@ -95,14 +138,14 @@ const AppNavigation = () => {
               }}
             />
 
-            <Stack.Screen
+            {/* <Stack.Screen
               name="Home"
               component={Home}
               options={{
                 headerShown: false,
                 cardStyleInterpolator: NavigationAnimationType,
               }}
-            />
+            /> */}
           </>
         ) : (
           <>

@@ -1,4 +1,4 @@
-import {USER_LOGIN, AUTH_LOADING, USER_LOGOUT} from './types';
+import {USER_EMAIL_LINK, USER_LOGIN, AUTH_LOADING, USER_LOGOUT} from './types';
 import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import APICallService from '../../Api/APICallService';
@@ -19,6 +19,15 @@ export const authLogOutAction = () => dispatch => {
     type: USER_LOGOUT,
   });
 };
+
+export const authEmailLinkAction =
+  (linkEmail = '') =>
+  dispatch => {
+    dispatch({
+      type: USER_EMAIL_LINK,
+      payload: linkEmail,
+    });
+  };
 
 export const authLogInTokenAction = token => dispatch => {
   dispatch({

@@ -14,15 +14,23 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useSelector, useDispatch} from 'react-redux';
 import Toast from 'react-native-toast-message';
+import auth from '@react-native-firebase/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import {userLoginAction} from '../../redux/actions/authActons';
+import {
+  userLoginAction,
+  authEmailLinkAction,
+  authLogInTokenAction,
+} from '../../redux/actions/authActons';
 
 const SignIn = ({navigation}) => {
   const dispatch = useDispatch();
+  const [linkSendVerifyLink, setLinkSendVerifyLink] = useState(null);
   const [passwordHide, setPasswordHide] = useState(true);
   const [emailInput, setEmailInput] = useState('');
   const [passwordInput, setPasswordInput] = useState('');
   const {appThemeColor} = useSelector(state => state.themeState);
+  const {authEmailLink} = useSelector(state => state.authState);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -35,6 +43,59 @@ const SignIn = ({navigation}) => {
 
   const userSignIn = () => {
     if (emailInput && passwordInput) {
+      auth()
+        .signInWithEmailAndPassword(emailInput, passwordInput)
+        .then(SignInData => {
+          console.log(SignInData, 'SIGN IN DATA');
+
+          if (
+            SignInData &&
+            SignInData.user &&
+            SignInData.user.emailVerified == false
+          ) {
+            alert('please, verfiy your email address');
+          } else if (
+            SignInData &&
+            SignInData.user &&
+            SignInData.user.emailVerified
+          ) {
+            alert(`login successful with ${emailInput}`);
+            dispatch(authLogInTokenAction('@FIrebaseAuthLogin'));
+          }
+        })
+        .catch(error => {
+          alert(error.message);
+        });
+      //   (async () => {
+      //   const BUNDLE_ID = 'com.rnreduxdemo';
+      //   const actionCodeSettings = {
+      //     handleCodeInApp: true,
+      //     // URL must be whitelisted in the Firebase Console.
+      //     url: 'https://rnreduxdemodevstree.page.link',
+      //     iOS: {
+      //       bundleId: BUNDLE_ID,
+      //     },
+      //     android: {
+      //       packageName: BUNDLE_ID,
+      //       installApp: true,
+      //       minimumVersion: '12',
+      //     },
+      //   };
+
+      //   await AsyncStorage.setItem('emailForSignIn', emailInput);
+
+      //   auth()
+      //     .sendSignInLinkToEmail(emailInput, actionCodeSettings)
+      //     .then(successSendEmail => {
+      //       alert(`Login link sent to ${emailInput}`);
+      //       setEmailInput('');
+      //       setPasswordInput('');
+      //     })
+      //     .catch(error => {
+      //       alert(error.message);
+      //     });
+      // })();
+
       // if (
       //   !String(emailInput)
       //     .toLowerCase()
@@ -52,7 +113,7 @@ const SignIn = ({navigation}) => {
 
       //   return;
       // }
-      dispatch(userLoginAction('8128421663', passwordInput));
+      // dispatch(userLoginAction('8128421663', passwordInput));
     } else {
       Toast.show({
         text1: 'you forgot to enter something',

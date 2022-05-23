@@ -9,3 +9,5 @@ export const GET_USER_ALL_LOADING = 'GET_USER_ALL_LOADING';
 export const GET_USER_ALL_ERROR = 'GET_USER_ALL_ERROR';
 
 export const TOGGLE_TASK = 'TOGGLE_TASK';
+
+export const USER_EMAIL_LINK = 'USER_EMAIL_LINK';
