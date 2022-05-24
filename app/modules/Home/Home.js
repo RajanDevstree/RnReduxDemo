@@ -17,12 +17,12 @@ import {changeThemeAction} from '../../redux/actions/themeActions';
 import {authLogOutAction} from '../../redux/actions/authActons';
 import {getUserTask} from '../../redux/actions/productActions';
 
-import {
-  AdMobBanner,
-  AdMobInterstitial,
-  PublisherBanner,
-  AdMobRewarded,
-} from 'react-native-admob';
+// import {
+//   AdMobBanner,
+//   AdMobInterstitial,
+//   PublisherBanner,
+//   AdMobRewarded,
+// } from 'react-native-admob';
 
 const Home = ({navigation}) => {
   const dispatch = useDispatch();

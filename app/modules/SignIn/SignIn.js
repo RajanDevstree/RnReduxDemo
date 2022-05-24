@@ -15,7 +15,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useSelector, useDispatch} from 'react-redux';
 import Toast from 'react-native-toast-message';
 import auth from '@react-native-firebase/auth';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {
   userLoginAction,
@@ -46,8 +45,6 @@ const SignIn = ({navigation}) => {
       auth()
         .signInWithEmailAndPassword(emailInput, passwordInput)
         .then(SignInData => {
-          console.log(SignInData, 'SIGN IN DATA');
-
           if (
             SignInData &&
             SignInData.user &&
@@ -66,54 +63,7 @@ const SignIn = ({navigation}) => {
         .catch(error => {
           alert(error.message);
         });
-      //   (async () => {
-      //   const BUNDLE_ID = 'com.rnreduxdemo';
-      //   const actionCodeSettings = {
-      //     handleCodeInApp: true,
-      //     // URL must be whitelisted in the Firebase Console.
-      //     url: 'https://rnreduxdemodevstree.page.link',
-      //     iOS: {
-      //       bundleId: BUNDLE_ID,
-      //     },
-      //     android: {
-      //       packageName: BUNDLE_ID,
-      //       installApp: true,
-      //       minimumVersion: '12',
-      //     },
-      //   };
 
-      //   await AsyncStorage.setItem('emailForSignIn', emailInput);
-
-      //   auth()
-      //     .sendSignInLinkToEmail(emailInput, actionCodeSettings)
-      //     .then(successSendEmail => {
-      //       alert(`Login link sent to ${emailInput}`);
-      //       setEmailInput('');
-      //       setPasswordInput('');
-      //     })
-      //     .catch(error => {
-      //       alert(error.message);
-      //     });
-      // })();
-
-      // if (
-      //   !String(emailInput)
-      //     .toLowerCase()
-      //     .match(
-      //       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-      //     )
-      // ) {
-      //   Toast.show({
-      //     text1: 'please enter a valid email address',
-      //     visibilityTime: 3000,
-      //     autoHide: true,
-      //     position: 'top',
-      //     type: 'error',
-      //   });
-
-      //   return;
-      // }
-      // dispatch(userLoginAction('8128421663', passwordInput));
     } else {
       Toast.show({
         text1: 'you forgot to enter something',

@@ -43,9 +43,7 @@ const AppNavigation = () => {
 
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(user => {
-      console.log(JSON.stringify(user), '1234567890');
       if (user && user.emailVerified) {
-        console.log('THiS IS RUING AND TOKEN SET SET SET');
         dispatch(authLogInTokenAction('@FIrebaseAuthLogin'));
       } else if (
         user &&
@@ -63,37 +61,10 @@ const AppNavigation = () => {
 
   const handleDynamicLink = link => {
     if (link) {
-      console.log(link, '1234567890=====');
-      // alert(JSON.stringify(link));
-      // alert(link.url.split('?')[1]);
-
-      if (auth().isSignInWithEmailLink(link.url)) {
-        dispatch(authEmailLinkAction(link.url));
-        // setLoading(true);
-        // console.log('set login true is runiing');
-
-        // try {
-        //   AsyncStorage.getItem('emailForSignIn').then(emailResponse => {
-        //     auth()
-        //       .signInWithEmailLink(emailResponse, link.url)
-        //       .then(data => {
-        //         console.log(data, 'DATA REPONSE SUCESS USER lOGIN');
-        //         setLoading(false);
-        //         dispatch(authLogInTokenAction('@FirebaseLogin'));
-        //       })
-        //       .catch(error => {
-        //         setLoading(false);
-        //         alert(error.message);
-        //         console.log(error, 'email link login Error');
-        //       });
-        //   });
-        // } catch (e) {
-        //   console.log(e);
-        //   setLoading(false);
-        // } finally {
-        //   setLoading(false);
-        // }
-      }
+      console.log(link.url);
+      // if (auth().isSignInWithEmailLink(link.url)) {
+        // dispatch(authEmailLinkAction(link.url));
+      // }
     }
   };
 
@@ -103,17 +74,14 @@ const AppNavigation = () => {
     dynamicLinks()
       .getInitialLink()
       .then(link => {
+        alert(link.url);
         if (link) {
-          alert(JSON.stringify(link));
-          alert(link.url.split('?')[1]);
-
-          if (auth().isSignInWithEmailLink(link.url)) {
-            dispatch(authEmailLinkAction(link.url));
-          }
+          // if (auth().isSignInWithEmailLink(link.url)) {
+            // dispatch(authEmailLinkAction(link.url));
+          // }
         }
       });
 
-    // When the component is unmounted, remove the listener
     return () => unsubscribe();
   }, []);
 

@@ -15,13 +15,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useSelector, useDispatch} from 'react-redux';
 import Toast from 'react-native-toast-message';
 import auth from '@react-native-firebase/auth';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-import {
-  userLoginAction,
-  authEmailLinkAction,
-  authLogInTokenAction,
-} from '../../redux/actions/authActons';
 
 const Phone = ({navigation}) => {
   const dispatch = useDispatch();
@@ -31,51 +24,23 @@ const Phone = ({navigation}) => {
   const [confirm, setConfirm] = useState(null);
   const [codeOtp, setCodeOtp] = useState('');
 
-  // console.log(confirm);
-
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       setPhoneInput('');
       setCodeOtp('');
-      // setConfirm('');
+      setConfirm('');
     });
 
     return unsubscribe;
   }, [navigation]);
 
   const userPhoneLogin = async () => {
-    debugger;
-
     if (phoneInput) {
       const confirmation = await auth().signInWithPhoneNumber(
         `+91 ${phoneInput}`,
       );
       setConfirm(confirmation);
 
-      console.log(JSON.stringify(confirmation));
-
-      debugger;
-
-      // auth()
-      //   .signInWithEmailAndPassword(phoneInput)
-      //   .then(SignInData => {
-      //     if (
-      //       SignInData &&
-      //       SignInData.user &&
-      //       SignInData.user.emailVerified == false
-      //     ) {
-      //       alert('please, verfiy your email address');
-      //     } else if (
-      //       SignInData &&
-      //       SignInData.user &&
-      //       SignInData.user.emailVerified
-      //     ) {
-      //       dispatch(authLogInTokenAction('@FIrebaseAuthLogin'));
-      //     }
-      //   })
-      //   .catch(error => {
-      //     alert(error.message);
-      //   });
     } else {
       Toast.show({
         text1: 'you forgot to enter something',
@@ -88,34 +53,8 @@ const Phone = ({navigation}) => {
   };
 
   const confirmCode = async () => {
-    // try {
-    //   const credential = auth.PhoneAuthProvider.credential(
-    //     confirm.verificationId,
-    //     codeOtp,
-    //   );
-
-    //   console.log(credential, 'aaaaaaaaaaaaaaaa');
-    //   // let userData = await auth().currentUser.linkWithCredential(credential);
-    //   // setUser(userData.user);
-    //   // console.log(userData, 'qqqqqqqqqqq');
-    // } catch (error) {
-    //   if (error.code == 'auth/invalid-verification-code') {
-    //     console.log(error.message, 'Invalid code.');
-    //   } else {
-    //     console.log(error.message, 'Account linking error');
-    //   }
-    // }
-
     try {
-      console.log(confirm.confirm);
-      const dataOTP = await confirm.confirm(codeOtp);
-      console.log(dataOTP, '2323232323232323');
-
-      const credential = auth.PhoneAuthProvider.credential(
-        confirm.verificationId,
-        codeOtp,
-      );
-      console.log(credential, 'xxxxxxxxxxxxxxxxxx');
+       await confirm.confirm(codeOtp);
     } catch (error) {
       console.log('Invalid code.');
     }

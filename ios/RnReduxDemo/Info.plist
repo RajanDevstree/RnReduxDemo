@@ -32,9 +32,21 @@
 				<string>com.devstree.rnreduxdemo</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.125513438179-2gs6molv4juv56bb9ean1ko7qdgl4sb0</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>FirebaseDynamicLinksCustomDomains</key>
+	<array>
+		<string>https://rnreduxdemodevstree.page.link/1</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -74,10 +86,6 @@
 	<array>
 		<string>armv7</string>
 	</array>
-	<key>FirebaseDynamicLinksCustomDomains</key>
-    <array>
-	    <string>https://rnreduxdemodevstree.page.link/1</string>
-    </array>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

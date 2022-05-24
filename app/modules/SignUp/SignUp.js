@@ -88,8 +88,6 @@ const SignUp = ({navigation}) => {
         return;
       }
 
-      // if (auth)
-
       auth()
         .createUserWithEmailAndPassword(emailInput, passwordInput)
         .then(successSendEmail => {
@@ -104,26 +102,18 @@ const SignUp = ({navigation}) => {
             successSendEmail.user &&
             successSendEmail.user.emailVerified == false
           ) {
-            // 1> sendSignInLinkToEmail 2> sendEmailVerification
             auth()
               .currentUser.sendEmailVerification({
-                // emai: emailInput,
                 handleCodeInApp: true,
-                // URL must be whitelisted in the Firebase Console.
                 url: 'https://rnreduxdemodevstree.page.link',
-                // iOS: {
-                //   bundleId: 'com.rnreduxdemo',
-                // },
-                // android: {
-                //   packageName: 'com.rnreduxdemo',
-                //   installApp: true,
-                //   minimumVersion: '12',
-                // },
               })
               .then(successSendEmail => {
                 alert(`Login link sent to ${emailInput}`);
+                setUserNameInput('');
                 setEmailInput('');
                 setPasswordInput('');
+                serUserDob('');
+                setPasswordConfirmInput('');
               })
               .catch(error => {
                 alert(error.message);
@@ -134,7 +124,6 @@ const SignUp = ({navigation}) => {
           alert(error.message);
         });
 
-      // dispatch(userLoginAction(emailInput, passwordInput));
     } else {
       Toast.show({
         text1: 'You Forgot to enter something',
