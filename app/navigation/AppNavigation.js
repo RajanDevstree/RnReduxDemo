@@ -61,9 +61,9 @@ const AppNavigation = () => {
 
   const handleDynamicLink = link => {
     if (link) {
-      console.log(link.url);
+      // console.log(link.url);
       // if (auth().isSignInWithEmailLink(link.url)) {
-        // dispatch(authEmailLinkAction(link.url));
+      // dispatch(authEmailLinkAction(link.url));
       // }
     }
   };
@@ -74,10 +74,10 @@ const AppNavigation = () => {
     dynamicLinks()
       .getInitialLink()
       .then(link => {
-        alert(link.url);
+        // alert(link.url);
         if (link) {
           // if (auth().isSignInWithEmailLink(link.url)) {
-            // dispatch(authEmailLinkAction(link.url));
+          // dispatch(authEmailLinkAction(link.url));
           // }
         }
       });
