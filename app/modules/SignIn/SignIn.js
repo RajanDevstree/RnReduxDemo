@@ -373,6 +373,31 @@ const SignIn = ({navigation}) => {
               </Text>
             </Text>
           </TouchableOpacity>
+          <View
+            style={{
+              marginTop: 15,
+              marginHorizontal: 50,
+              paddingVertical: 0.4,
+              elevation: 1,
+              backgroundColor: '#DDDDDD',
+            }}
+          />
+
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('Phone');
+            }}
+            style={{alignItems: 'center', top: 10}}>
+            <Text style={{fontSize: 12}}>
+              Login With PhoneNumber
+              <Text
+                style={{textDecorationLine: 'underline', color: appThemeColor}}>
+                {' '}
+                click here
+              </Text>
+            </Text>
+          </TouchableOpacity>
+
         </ScrollView>
       </SafeAreaView>
     </>

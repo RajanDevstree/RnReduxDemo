@@ -10,6 +10,7 @@ import dynamicLinks from '@react-native-firebase/dynamic-links';
 import auth from '@react-native-firebase/auth';
 
 import SignIn from '../modules/SignIn/SignIn.js';
+import Phone from '../modules/Phone/Phone.js';
 // import Home from '../modules/Home/Home';
 import SignUp from '../modules/SignUp/SignUp';
 import Loading from '../modules/Loading/Loading';
@@ -42,9 +43,17 @@ const AppNavigation = () => {
 
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(user => {
-      console.log(user, '1234567890');
+      console.log(JSON.stringify(user), '1234567890');
       if (user && user.emailVerified) {
         console.log('THiS IS RUING AND TOKEN SET SET SET');
+        dispatch(authLogInTokenAction('@FIrebaseAuthLogin'));
+      } else if (
+        user &&
+        user.providerData &&
+        user.providerData[0] &&
+        user.providerData[0].providerId &&
+        user.providerData[0].providerId == 'phone'
+      ) {
         dispatch(authLogInTokenAction('@FIrebaseAuthLogin'));
       }
       setLoading(false);
@@ -160,6 +169,15 @@ const AppNavigation = () => {
             <Stack.Screen
               name="SignUp"
               component={SignUp}
+              options={{
+                headerShown: false,
+                cardStyleInterpolator: NavigationAnimationType,
+              }}
+            />
+
+            <Stack.Screen
+              name="Phone"
+              component={Phone}
               options={{
                 headerShown: false,
                 cardStyleInterpolator: NavigationAnimationType,
